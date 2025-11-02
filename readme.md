@@ -19,6 +19,19 @@ To run this code, you must have Python installed along with the following librar
 pip install numpy matplotlib
 
 Mathematical Structure
+## 📐 Mathematical Structure (Simplified)
+
 The Homogeneous Transformation Matrix T is constructed with the following block structure:
 
-$$T = \begin{pmatrix} R & p \\ \mathbf{0} & 1 \end{pmatrix} $$ * $R$: The $3 \times 3$ Rotation Matrix (Orientation). * $p$: The $3 \times 1$ Position Vector (Translation). * $\mathbf{0}$: The $1 \times 3$ zero vector $\begin{pmatrix} 0 & 0 & 0 \end{pmatrix}$. Given that $R$ is an orthogonal matrix, the inverse transformation $T^{-1}$ is calculated efficiently as: $$T^{-1} = \begin{pmatrix} R^T & -R^T p \\ \mathbf{0} & 1 \end{pmatrix} $$\#\#  Usage Example The following code demonstrates defining a transformation ($90^\circ$ Z-rotation and a translation of $(5, 2, 8)$), calculating $T$ and $T^{-1}$, and visualizing the frames. ```python # Import libraries and define functions (homogeneous_matrix, rot_z, etc.) above... # 1. Define Transformation Parameters (Z-rotation by 90 degrees, translation (5, 2, 8)) matrix = rot_z(90) vector = np.array([5, 2, 8]) # 2. Calculate T and T^-1 Matrices homogen_matrix = homogeneous_matrix(matrix, vector) inverse_matrix = hom_inverse(homogen_matrix) print("Homogeneous Transformation Matrix (T):\n", homogen_matrix) print("\nInverse Transformation Matrix (T^-1):\n", inverse_matrix) # 3. 3D Visualization Setup fig = plt.figure(figsize=(10, 8)) ax = fig.add_subplot(111, projection='3d') # a) Fixed Frame (World System) plot_coordinate_system(ax, np.identity(3), np.array([0, 0, 0]), 'Fixed (A)', scale=2) # b) Transformed Frame (Mobile System) R_B = homogen_matrix[:3, :3] p_B = homogen_matrix[:3, 3] plot_coordinate_system(ax, R_B, p_B, 'Mobile (B)', scale=2) # c) Graph Settings max_coord = max(np.max(np.abs(p_B)) + 2, 3) ax.set_xlim([-max_coord, max_coord]) ax.set_ylim([-max_coord, max_coord]) ax.set_zlim([-max_coord, max_coord]) ax.set_title(r'Homogeneous Transformation ($T_{A \to B}$)') ax.legend() plt.show() ```$$
+T = | R | p |
+    | 0 | 1 |
+
+Where:
+* R is the 3x3 Rotation Matrix (Orientation).
+* p is the 3x1 Position Vector (Translation).
+* 0 is the 1x3 zero vector (0 0 0).
+
+Since R is an orthogonal matrix, the inverse transformation T^-1 is calculated efficiently as:
+
+T^-1 = | R^T | -R^T * p |
+       | 0   | 1        |
